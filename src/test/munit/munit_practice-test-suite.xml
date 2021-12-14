@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="munit_practice-test-suite.xml" />
+	<munit:test name="munit_practice-test-suite-success-assertEquals" doc:id="e795695b-25a6-440b-baa2-301ecd100386" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="3929d491-ea55-453c-8c97-5f999d280b5e" >
+				<munit:attributes value='#[{queryParams: {fName:"Krishan",lName: "Nanda"}}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to munit_practiceFlow" doc:id="d77f82ff-5dd2-4d39-b483-35cdc5b03534" name="munit_practiceFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="8e57842e-47ed-4b1a-b776-9c2a012b3470" actual="#[payload.message]" expected="Welcome to MuleSoft Krishan Nanda" message="Test Failed"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="munit_practice-test-success-assertThat" doc:id="b6d9cad1-7b6f-4cf4-8f22-3c21e21820c0" >
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="cc0ab0f2-d1af-4b8e-8717-b39d8266c106" >
+				<munit:attributes value='#[{queryParams: {fName:"Krishan",lName: "Nanda"}}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to munit_practiceFlow" doc:id="deb1ca19-8aee-4103-b6e3-7817d23e94e2" name="munit_practiceFlow" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="a2657d4c-51b4-4642-9d3b-50405fbd50a9" expression="#[payload.message]" is='#[MunitTools::containsString("Welcome to MuleSoft Krishan Nanda")]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="munit_practice-test-success-assertExpression" doc:id="58aa5508-6ad8-449e-9671-749e47ae66de" >
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="05d726c9-26e2-4ca0-840a-4df8407b01a3" >
+				<munit:attributes value="#[readUrl('classpath://sayhello/say_hello_attributes.dwl')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to munit_practiceFlow" doc:id="7a265ed6-acf5-4f03-be64-e54a8e4af5c7" name="munit_practiceFlow" />
+		</munit:execution>
+		<munit:validation >
+			<logger level="INFO" doc:name="Logger" doc:id="15762640-818c-4441-a83c-bebc1b3516d5" message="#[payload]"/>
+			<munit-tools:assert doc:name="Assert expression" doc:id="4e1df32b-a928-43d7-a447-242a5766364d" message="Payload doesn't exist">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+
+import sayHello::say_hello_test
+ ---
+say_hello_test::main({payload: payload,attributes: attributes,vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
