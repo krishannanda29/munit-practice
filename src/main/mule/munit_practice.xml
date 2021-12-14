@@ -17,7 +17,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 output application/json
 ---
 {
-	"message": "Welcome to MuleSoft " ++ (attributes.queryParams.fName as String ++ " " ++ attributes.queryParams.lName as String)
+	"message": "Welcome to MuleSoft " ++ (attributes.queryParams.fName as String ++ " " ++ attributes.queryParams.lName as String) ++ "GitHub changed added."
 } ]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
